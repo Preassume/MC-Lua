@@ -1,4 +1,24 @@
+local baseURL = "https://raw.githubusercontent.com/Preassume/MC-Lua/tree/main/lua scripts/"
 
-function getScript(url)
+local scripts = {
+    ["commonAPI"] = "commonAPI.lua",
+    ["autoAcacia"] = "treeFarming/autoAcacia.lua",
+}
+
+function getScript(url, fileName)
+    cacheBreak = tostring(math.random(0, 99999))
     
+    url = url..cacheBreak
+    
+    local res, err = http.get(url)
+    if not res then error(err) end
+    
+    if fs.exists(fileName) then fs.delete(fileName) end
+    
+    shell.run("wget", url, fileName)
+end
+
+for fn, dir in pairs(scripts) do
+    local url = baseURL..dir
+    getScript(url, fn)
 end
