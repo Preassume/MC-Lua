@@ -8,7 +8,7 @@ local scripts = {
 function getScript(url, fileName)
     cacheBreak = tostring(math.random(0, 99999))
     
-    url = url..cacheBreak
+    url = url.."?breaker="..cacheBreak
     
     local res, err = http.get(url)
     if not res then error(err) end
