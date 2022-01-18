@@ -1,4 +1,4 @@
-local baseURL = "https://raw.githubusercontent.com/Preassume/MC-Lua/tree/main/lua scripts/"
+local baseURL = "https://raw.githubusercontent.com/Preassume/MC-Lua/main/lua-scripts/"
 
 local scripts = {
     ["commonAPI"] = "commonAPI.lua",
