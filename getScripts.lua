@@ -6,7 +6,7 @@ local scripts = {
 }
 
 function getScript(url, fileName)
-    cacheBreak = tostring(math.random(0, 99999))
+    local cacheBreak = tostring(math.random(0, 99999))
     
     url = url.."?breaker="..cacheBreak
     
