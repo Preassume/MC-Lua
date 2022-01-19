@@ -3,6 +3,7 @@ local baseURL = "https://raw.githubusercontent.com/Preassume/MC-Lua/main/lua-scr
 local scripts = {
     ["commonAPI"] = "commonAPI.lua",
     ["autoAcacia"] = "treeFarming/autoAcacia.lua",
+    ["autoFarm"] = "cropFarming/autoFarm.lua",
 }
 
 function getScript(url, fileName)
