@@ -3,23 +3,24 @@ local decayPeriod = 60 -- How long we wait for leaves to decay
 
 local preapi = require("commonAPI")
 
-local acacia = require("acacia")
-
 local rightCounter = 0
 local airCounter = 0
 local treeCounter = 0
 local logTotal = 0
 
+local trees = {
+    ["minecraft:birch_log"] = "birch",
+    ["minecraft:dark_oak_log"] = "dark_oak",
+    ["minecraft:oak_log"] = "oak",
+    ["minecraft:acacia_log"] = require("acacia"),
+    ["minecraft:spruce_log"] = "spruce",
+    ["minecraft:jungle_log"] = "jungle",
+}
+
 -- Define a list of usable home blocks and define their type
 local isHome = {
     ["minecraft:granite"] = "minecraft:acacia_sapling",
     ["minecraft:diorite"] = "minecraft:birch_sapling",
-}
-
--- The blocks we're allowed to mine, and what type they are.
-local canMine = {
-    ["minecraft:acacia_log"] = "log",
-    ["minecraft:acacia_leaves"] = "leaf",
 }
 
 -- Items that we should keep in the turtle's inventory when emptying into chest.
@@ -111,28 +112,16 @@ function bonemeal()
     turtle.select(1)
 end
 
-function woodCount()
-    local count = 0
-    for i=1, 16, 1 do
-        local data = turtle.getItemDetail(i)
-        if data then if data.name == "minecraft:acacia_log" then
-            count = count + data.count
-        end end
-    end
-    return count
-end
-
 -- 
 function checkTrees()
     local isBlock, data = turtle.inspect()
     
-    if canMine[data.name] == "log" then
+    if trees[data.name] then
         treeCounter = treeCounter + 1
         local fuelUsed = turtle.getFuelLevel()
         io.write("\n--- Tree "..treeCounter.." ---\n")
         
-        mineTree()
-        io.write(woodCount().." logs.\n")
+        trees[data.name].mineTree()
         
         sleep(decayPeriod)
         
