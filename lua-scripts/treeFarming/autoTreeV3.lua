@@ -131,6 +131,8 @@ function checkTrees()
         
         placeSapling()
         
+        bonemeal()
+        
         fuelUsed = fuelUsed - turtle.getFuelLevel()
         if fuelUsed < 0 then
             fuelUsed = fuelUsed * -1
@@ -140,21 +142,6 @@ function checkTrees()
         end
         io.write("Fuel: "..turtle.getFuelLevel().."\n")
         io.write("Done. Total logs mined: "..logTotal.."\n")
-    else
-        if not isBlock then
-            placeSapling()
-            bonemeal()
-        elseif data.name == sapling then
-            bonemeal()
-        end
-        
-        isBlock, data = turtle.inspectDown()
-        
-        if isHome[data.name] == "next" then
-            nextHome()
-        elseif isHome[data.name] == "goBack" then
-            firstHome()
-        end
     end
     sleep(updatePeriod)
 end

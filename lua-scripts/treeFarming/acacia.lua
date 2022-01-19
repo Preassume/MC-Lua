@@ -65,13 +65,13 @@ local acacia = {}
 function acacia.mineTree()
     for i=1, 4, 1 do
         if forward() then
-            mineTree()
+            acacia.mineTree()
             turtle.back()
         end
         turtle.turnRight()
     end
     if up() then
-        mineTree()
+        acacia.mineTree()
         turtle.down()
     end
 end
