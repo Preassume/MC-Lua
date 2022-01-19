@@ -1,11 +1,5 @@
 local baseURL = "https://raw.githubusercontent.com/Preassume/MC-Lua/main/lua-scripts/"
 
-local scripts = {
-    ["commonAPI"] = "commonAPI.lua",
-    ["autoAcacia"] = "treeFarming/autoAcacia.lua",
-    ["autoFarm"] = "cropFarming/autoFarm.lua",
-}
-
 function getScript(url, fileName)
     local cacheBreak = tostring(math.random(0, 99999))
     
@@ -18,6 +12,10 @@ function getScript(url, fileName)
     
     shell.run("wget", url, fileName)
 end
+
+getScript("https://raw.githubusercontent.com/Preassume/MC-Lua/main/scriptLocations.lua", "scriptLocations")
+
+local scripts = require("scriptLocations")
 
 for fn, dir in pairs(scripts) do
     local url = baseURL..dir
