@@ -5,14 +5,6 @@ local preapi = require("commonAPI")
 
 local acacia = require("acacia")
 
--- The blocks we use as "home" points (right in front of sapling)
--- Edit these two to change what kind of blocks you want to use
--- to indicate home points
-local homeTypes = {
-    ["minecraft:granite"] = "minecraft:acacia_sapling",
-    ["minecraft:diorite"] = "minecraft:birch_sapling",
-}
-
 local rightCounter = 0
 local airCounter = 0
 local treeCounter = 0
@@ -20,9 +12,8 @@ local logTotal = 0
 
 -- Define a list of usable home blocks and define their type
 local isHome = {
-    [nextHome] = "next",
-    [gotoFirstHome] = "goBack",
-    [fixedHome] = "fixed",
+    ["minecraft:granite"] = "minecraft:acacia_sapling",
+    ["minecraft:diorite"] = "minecraft:birch_sapling",
 }
 
 -- The blocks we're allowed to mine, and what type they are.
@@ -87,10 +78,10 @@ function placeSapling()
         return false
     end
     
-    local index = preapi.findItem(homeTypes[data.name])
+    local index = preapi.findItem(isHome[data.name])
     
     if not index then
-        io.write("Error: no "..homeTypes[data.name].." saplings in inventory.\n")
+        io.write("Error: no "..isHome[data.name].." saplings in inventory.\n")
         return false
     end
     
