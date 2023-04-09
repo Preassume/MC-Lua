@@ -1,4 +1,4 @@
--- wget https://raw.githubusercontent.com/Preassume/MC-Lua/main/elevatorScripts/getElevatorScripts.lua getElevatorScripts
+-- wget https://raw.githubusercontent.com/Preassume/MC-Lua/main/lua-scripts/elevatorScripts/getElevatorScripts.lua getElevatorScripts
 -- Use the above command on a minecraft computer to get this program.
 -- Run this program to automatically gather all other elevator scripts.
 
@@ -17,7 +17,7 @@ function getScript(url, fileName)
     shell.run("wget", url, fileName)
 end
 
-getScript("https://raw.githubusercontent.com/Preassume/MC-Lua/main/elevatorScripts/elevatorScriptLocations.lua", "elevatorScriptLocations")
+getScript("https://raw.githubusercontent.com/Preassume/MC-Lua/main/lua-scripts/elevatorScripts/elevatorScriptLocations.lua", "elevatorScriptLocations")
 
 local scripts = require("elevatorScriptLocations")
 
