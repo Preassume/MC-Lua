@@ -10,7 +10,7 @@ function getScript(url, fileName)
     url = url.."?breaker="..cacheBreak
     
     local res, err = http.get(url)
-    if not res then error(err) end
+    if not res then error(err..'\n'..fileName..'\n'..url) end
     
     if fs.exists(fileName) then fs.delete(fileName) end
     
