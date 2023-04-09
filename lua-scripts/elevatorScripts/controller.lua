@@ -2,6 +2,8 @@
 -- Paste the above command into a new program caled 'startup'
 -- Replace 'ch' with desired modem channel.
 
+local arg = ...
+
 local modem = peripheral.wrap("left")
 local listenCh = arg[0]
 modem.open(listenCh)

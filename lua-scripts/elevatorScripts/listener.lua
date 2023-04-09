@@ -2,6 +2,8 @@
 -- Paste the above command into a new program caled 'startup'
 -- Replace 'ch' and 'cmd' with desired parameters.
 
+local arg = ...
+
 local modem = peripheral.wrap("left")
 local listenCh = arg[0]
 modem.open(listenCh)
