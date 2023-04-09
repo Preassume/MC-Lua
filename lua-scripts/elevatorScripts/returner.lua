@@ -1,16 +1,17 @@
--- shell.run("returner", ch, floor)
+-- shell.run("returner", sendch, repch, floor)
 -- Paste the above command into a new program caled 'startup'
--- Replace 'ch' with desired modem channel to listen on.
+-- Replace 'sendch' and 'repch' with desired channels for sending messages and recieving replies.
 -- 'floor' is an optional parameter. Replace with the name of your floor, or don't include it.
 
 local arg = {...}
 
 local modem = peripheral.wrap("left")
 local sendCh = tonumber(arg[1])
+local replyCh = tonumber(arg[2])
 
 local floorName
-if arg[2] then
-    floorName = arg[2]
+if arg[3] then
+    floorName = arg[3]
 else
     floorName = "down"
 end
@@ -29,11 +30,29 @@ while true do
         sleep(1)
     elseif key == keys.space then
         term.clear()
-        print("Calling elevator...")
-        sleep(1)
-        modem.transmit(sendCh, 0, floorName)
-        sleep(2)
-        term.clear()
-        sleep(1)
+        print("Searching for floor '"..input.."' ...")
+        modem.transmit(sendCh, replyCh, input)
+        print("Press any key to cancel.")
+        
+        local searching = true
+        while searching do
+            local eventData = {os.pullEvent()}
+            local event = eventData[1]
+
+            if event == "modem_message" then
+                if eventData[5] == 104 then
+                    modem.transmit(sendCh, replyCh, "down")
+                    searching = false
+                    print("Found floor '"..input.."' !")
+                    sleep(3)
+                    term.clear()
+                end
+            elseif event == "key" then
+                searching = false
+                print("Stopping search ...")
+                sleep(1)
+                term.clear()
+            end
+        end
     end
 end
