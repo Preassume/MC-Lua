@@ -1,14 +1,14 @@
--- os.run({ch, cmd}, "listener.lua")
+-- shell.run("listener", ch, cmd)
 -- Paste the above command into a new program caled 'startup'
 -- Replace 'ch' and 'cmd' with desired parameters.
 
-local arg = ...
+local arg = {...}
 
 local modem = peripheral.wrap("left")
-local listenCh = arg[1]
+local listenCh = tonumber(arg[1])
 modem.open(listenCh)
 
-local toggleCommand = arg[2]
+local toggleCommand = tonumber(arg[2])
 
 local piston = "right"
 local pistonState = false -- Default resting state

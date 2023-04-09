@@ -1,11 +1,11 @@
--- os.run({ch}, "controller.lua")
+-- shell.run("controller", ch)
 -- Paste the above command into a new program caled 'startup'
 -- Replace 'ch' with desired modem channel.
 
-local arg = ...
+local arg = {...}
 
 local modem = peripheral.wrap("left")
-local listenCh = arg[1]
+local listenCh = tonumber(arg[1])
 modem.open(listenCh)
 
 local gearShift = "down"

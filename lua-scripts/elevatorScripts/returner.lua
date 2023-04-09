@@ -1,11 +1,11 @@
--- os.run({ch}, "controller.lua")
+-- shell.run("returner", ch)
 -- Paste the above command into a new program caled 'startup'
--- Replace 'ch' with desired modem channel.
+-- Replace 'ch' with desired modem channel to listen on.
 
-local arg = ...
+local arg = {...}
 
 local modem = peripheral.wrap("left")
-local sendCh = arg[1]
+local sendCh = tonumber(arg[1])
 
 while true do
     print("Press 'y' to send the elevator back up:")

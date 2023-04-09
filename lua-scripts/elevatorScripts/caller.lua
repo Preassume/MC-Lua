@@ -1,4 +1,4 @@
--- os.run({ch, replych, floors}, "caller.lua")
+-- shell.run("caller", ch, replych, floors)
 -- Paste the above command into a new program caled 'startup'
 -- Replace 'ch' with desired modem channel.
 -- Replaca 'replych' with desired modem reply channel.
@@ -7,8 +7,8 @@
 
 local arg = ...
 
-local sendCh = arg[1]
-local replyCh = arg[2]
+local sendCh = tonumber(arg[1])
+local replyCh = tonumber(arg[2])
 local floors
 if arg[3] then
     floors = arg[3]
@@ -20,9 +20,11 @@ modem.open(replyCh)
 
 while true do
     print("What floor would you like to go to?")
-
-    for _, flr in floors do
-        print(flr)
+    
+    if floors then
+        for _, flr in floors do
+            print(flr)
+        end
     end
 
     local input = read()
