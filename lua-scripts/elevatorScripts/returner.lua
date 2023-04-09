@@ -40,7 +40,7 @@ while true do
         else
             term.clear()
             print("Searching for floor '"..floorName.."' ...")
-            modem.transmit(sendCh, replyCh, input)
+            modem.transmit(sendCh, replyCh, floorName)
             print("Press any key to cancel.")
             
             local searching = true
