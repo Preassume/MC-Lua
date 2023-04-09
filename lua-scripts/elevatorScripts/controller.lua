@@ -8,7 +8,7 @@ local modem = peripheral.wrap("left")
 local listenCh = tonumber(arg[1])
 modem.open(listenCh)
 
-local gearShift = "down"
+local gearShift = "bottom"
 local gearState = false -- Default resting state
 rs.setOutput(gearShift, gearState)
 
@@ -16,11 +16,13 @@ while true do
     local event, modemSide, senderCh, replyCh, message, senderDist
     repeat
         event, modemSide, senderCh, replyCh, message, senderDist = os.pullEvent("modem_message")
-    until channel == listenCh
+    until senderCh == listenCh
+    print("got message: "..message)
     
     if message == "down" then
         gearState = not gearState
         modem.transmit(replyCh, listenCh, 104)
+        print("transmitted")
     elseif message == "up" then
         gearState = false
     end

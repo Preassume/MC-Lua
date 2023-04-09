@@ -8,7 +8,7 @@ local modem = peripheral.wrap("left")
 local listenCh = tonumber(arg[1])
 modem.open(listenCh)
 
-local toggleCommand = tonumber(arg[2])
+local toggleCommand = arg[2]
 
 local piston = "right"
 local pistonState = false -- Default resting state
@@ -18,11 +18,13 @@ while true do
     local event, modemSide, senderCh, replyCh, message, senderDist
     repeat
         event, modemSide, senderCh, replyCh, message, senderDist = os.pullEvent("modem_message")
-    until channel == listenCh
+    until senderCh == listenCh
+    print("got message: "..message)
     
     if message == toggleCommand then
         pistonState = not pistonState
         modem.transmit(replyCh, listenCh, 104)
+        print("transmitted")
     elseif message == "up" then
         pistonState = false
     end
