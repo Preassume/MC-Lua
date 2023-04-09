@@ -5,10 +5,10 @@
 local arg = ...
 
 local modem = peripheral.wrap("left")
-local listenCh = arg[0]
+local listenCh = arg[1]
 modem.open(listenCh)
 
-local toggleCommand = arg[1]
+local toggleCommand = arg[2]
 
 local piston = "right"
 local pistonState = false -- Default resting state

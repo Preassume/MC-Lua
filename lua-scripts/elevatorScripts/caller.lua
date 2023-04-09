@@ -7,11 +7,11 @@
 
 local arg = ...
 
-local sendCh = arg[0]
-local replyCh = arg[1]
+local sendCh = arg[1]
+local replyCh = arg[2]
 local floors
-if arg[2] then
-    floors = arg[2]
+if arg[3] then
+    floors = arg[3]
 end
 
 local isHome = true

@@ -5,7 +5,7 @@
 local arg = ...
 
 local modem = peripheral.wrap("left")
-local listenCh = arg[0]
+local listenCh = arg[1]
 modem.open(listenCh)
 
 local gearShift = "down"

@@ -5,7 +5,7 @@
 local arg = ...
 
 local modem = peripheral.wrap("left")
-local sendCh = arg[0]
+local sendCh = arg[1]
 
 while true do
     print("Press 'y' to send the elevator back up:")
