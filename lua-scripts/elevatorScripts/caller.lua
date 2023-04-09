@@ -5,7 +5,7 @@
 -- Replace 'floors' with a table containing the floor names you wish to display
 -- NOTE: 'floors' is purely visual and optional.
 
-local arg = ...
+local arg = {...}
 
 local sendCh = tonumber(arg[1])
 local replyCh = tonumber(arg[2])
