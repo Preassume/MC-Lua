@@ -25,6 +25,8 @@ while true do
         print("transmitted")
     elseif message == "up" then
         gearState = false
+    elseif message == "down" then
+        gearState = true
     end
     
     rs.setOutput(gearShift, gearState)

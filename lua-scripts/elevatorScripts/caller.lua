@@ -28,29 +28,37 @@ while true do
     end
 
     local input = read()
-    term.clear()
-    print("Searching for floor '"..input.."' ...")
-    modem.transmit(sendCh, replyCh, input)
-    print("Press any key to cancel.")
-    
-    local searching = true
-    while searching do
-        local eventData = {os.pullEvent()}
-        local event = eventData[1]
+    if input == "up" or input == "down" then
+        modem.transmit(sendCh, replyCh, input)
+        term.clear()
+        print("Going "..input.." !")
+        sleep(3)
+        term.clear()
+    else
+        term.clear()
+        print("Searching for floor '"..input.."' ...")
+        modem.transmit(sendCh, replyCh, input)
+        print("Press any key to cancel.")
+        
+        local searching = true
+        while searching do
+            local eventData = {os.pullEvent()}
+            local event = eventData[1]
 
-        if event == "modem_message" then
-            if eventData[5] == 104 then
-                modem.transmit(sendCh, replyCh, "down")
+            if event == "modem_message" then
+                if eventData[5] == 104 then
+                    modem.transmit(sendCh, replyCh, "down")
+                    searching = false
+                    print("Found floor '"..input.."' !")
+                    sleep(3)
+                    term.clear()
+                end
+            elseif event == "key" then
                 searching = false
-                print("Found floor '"..input.."' !")
-                sleep(3)
+                print("Stopping search ...")
+                sleep(1)
                 term.clear()
             end
-        elseif event == "key" then
-            searching = false
-            print("Stopping search ...")
-            sleep(1)
-            term.clear()
         end
     end
 end
