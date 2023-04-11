@@ -39,12 +39,30 @@ local protocol = args[1] or error("Error: No protocol provided.")
 
 local floorName = args[2] or error("Error: No floor name provided.")
 
-local floorLevel = args[3] or error("Error: No floor level provided.")
+local floorLevel = tonumber(args[3]) or error("Error: No floor level provided.")
+
+local floorInfo = floorName..floorLevel
 
 local topExtended = false
 local bottomExtended = false
 
 peripheral.find("modem", rednet.open)
+
+local function sendInfo(controllerID)
+    local count = 0
+    while count < 60 do
+        count = count + 1
+        rednet.send(controllerID, floorInfo, protocol)
+        sleep(1)
+    end
+end
+
+local function listenConfirm(controllerID)
+    local id, msg
+    repeat
+        id, msg = rednet.recieve(protocol)
+    until id and id == controllerID
+end
 
 while true do
     local id, msg
@@ -54,7 +72,8 @@ while true do
     local controllerID = id
     
     if msg == 30 then -- Who are you?
-        rednet.send(controllerID, floorName, protocol) -- It's me!
+        --rednet.send(controllerID, floorName, protocol) -- It's me!
+        parallel.waitForAny(sendInfo, listenConfirm)
     elseif msg == 31 then -- Where's the elevator?
         if redstone.getInput("front") then
             rednet.send(controllerID, floorName, protocol) -- It's here!

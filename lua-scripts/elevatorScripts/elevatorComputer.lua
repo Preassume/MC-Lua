@@ -5,6 +5,14 @@
 -- so it's extra important that you create a startup.lua file to run this on startup.
 -- Otherwise it'd be annoying.
 
+---HOW TO USE----------------------------------------------------------
+
+-- shell.run("floorComputer", "protocol")
+-- Put the above command in a file named "startup.lua"
+-- Replace 'protocol' with the same protocol you used for the controller computer
+
+-----------------------------------------------------------------------
+
 local args = {...}
 
 local protocol = args[1] or error("Error: No protocol provided.")
@@ -49,7 +57,7 @@ while true do
         repeat
             i, m = rednet.receive(protocol, 1)
             count = count + 1
-        until (m >= 37 and m <= 39) or count > 2
+        until m and ((m >= 37 and m <= 39) or count > 2)
         if m == 37 then
             print("Already on that floor.")
             sleep(2)

@@ -16,7 +16,7 @@
 
 ---HOW TO USE----------------------------------------------------------
 
--- shell.run("controllerv2", "protocol")
+-- shell.run("controllerv3", "protocol")
 -- Place the above command into a new file named startup.lua
 -- Replace 'protocol' with your desired rednet protocol (in quotations)
 
@@ -45,10 +45,12 @@ local function getFloors()
     local function getNum(msg) return tonumber(msg:match("[+-]?%d+")) end
     local function getName(msg) return msg:gsub("[+-]?%d+", "") end
     
-    rednet.broadcast(30, protocol) -- 30 means "everybody tell me who you are"
+    local id, msg
     repeat
-        local id, msg = rednet.receive(protocol, 3)
+        rednet.broadcast(30, protocol) -- 30 means "everybody tell me who you are"
+        id, msg = rednet.receive(protocol, 3)
         if msg then
+            rednet.send(id, 32, protocol)
             local floorNum = getNum(msg)
             local floorName = getName(msg)
             floorLevels[floorName] = floorNum
@@ -57,7 +59,7 @@ local function getFloors()
     until not msg
     
     floorString = ""
-    for num, name in pairs(floors) do
+    for num, name in pairs(floorLevels) do
         floorString = floorString..name.."\n"
     end
 end
@@ -116,7 +118,7 @@ print("Starting up...")
 getFloors()
 
 clearScrn()
-for num, name in pairs(floors) do
+for num, name in pairs(floorLevels) do
     print(num, name)
 end
 
@@ -133,7 +135,7 @@ while true do
     elseif msg == "down" then
         goingUp = false
     else
-        msg = msg..floorlevels[msg]
+        msg = msg..floorLevels[msg]
         gotoFloor(msg, id)
     end
     
