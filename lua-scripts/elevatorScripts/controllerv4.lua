@@ -41,7 +41,7 @@ local function addFloor(ID, floor)
     local floorNum = getNum(floor)
     
     floorLevels[floorName] = floorNum
-    floorIDs[floorName] = ID
+    floorIDs[ID] = floorName
     
     floorString = floorString..floorName.."\n"
     print(ID, floorName, floorNum)
@@ -54,8 +54,89 @@ local function refreshFloorList()
     rednet.broadcast(30, protocol)
 end
 
-local function gotoFloor(floor)
+local function getID(floor)
+    for id, flr in pairs(floorIDs) do
+        if flr == floor then
+            return id
+        end
+    end
+    return false
+end
+
+local function findElevator()
+    local id, msg
+    local count = 0
+    repeat
+        rednet.broadcast(31, protocol)
+        id, msg = rednet.receive(protocol, 1)
+        
+        if msg and msg == 35 then
+            return id
+        elseif msg then
+            getRednet(id, msg)
+        end
+        
+        count = count + 1
+    until count > 2
+    return false
+end
+
+local function gotoFloor(id, floor)
+    print("Command: go to "..floor)
     
+    local locationID = findElevator()
+    
+    if not locationID then
+        rednet.send(id, 38, protocol)
+        return
+    end
+    
+    local locationLevel = floorLevels[floorIDs[id]]
+    local destinationLevel = floorLevels[floor]
+    
+    local destinationID = getID(floor)
+    if not destinationID then
+        rednet.send(id, 39, protocol)
+        return
+    end
+    
+    if locationLevel == destinationLevel then
+        rednet.send(destinationID, 38, protocol)
+        return
+    elseif locationLevel < destinationLevel then -- Floor is lower
+        if goingUp then
+            goingUp = false
+        end
+        rednet.send(destinationID, "bottom", protocol)
+    elseif locationLevel > destinationLevel then -- Floor is higher
+        if not goingUp then
+            goingUp = true
+        end
+        rednet.send(destinationID, "top", protocol)
+    end
+    rednet.send(locationID, "reset", protocol)
+end
+
+local function getRednet(id, msg)
+    if msg then
+        print(id, msg)
+        if elevatorCodes[msg] then
+            elevatorCodes[msg](id)
+        elseif msg == msg:match("%w+[+-]?%d+") then
+            addFloor(id, msg)
+        elseif floorLevels[msg] ~= nil then
+            gotoFloor(id, msg)
+        elseif msg == "up" then
+            goingUp = true
+        elseif msg == "down" then
+            goingUp = false
+        elseif msg == "refresh" then
+            refreshFloorList()
+        else
+            rednet.send(id, 39, protocol)
+        end
+        rs.setOutput("bottom", not goingUp)
+    end 
 end
 
 clearScrn()
@@ -68,24 +149,5 @@ refreshFloorList()
 while true do
     local id, msg
     id, msg = rednet.receive(protocol)
-    
-    if msg then
-        print(id, msg)
-        if elevatorCodes[msg] then
-            elevatorCodes[msg](id)
-        elseif msg == msg:match("%w+[+-]?%d+") then
-            addFloor(id, msg)
-        elseif floorLevels[msg] ~= nil then
-            gotoFloor(msg)
-        elseif msg == "up" then
-            goingUp = true
-        elseif msg == "down" then
-            goingUp = false
-        elseif msg == "refresh" then
-            refreshFloorList()
-        else
-            rednet.send(id, 39, protocol)
-        end
-        rs.setOutput("bottom", not goingUp)
-    end
+    getRednet(id, msg)
 end
