@@ -1,4 +1,4 @@
--- shell.run("controllerv3", "protocol")
+-- shell.run("controllerv4", "protocol")
 
 local args = {...}
 
@@ -8,9 +8,10 @@ local gearShift = "bottom"
 
 peripheral.find("modem", rednet.open)
 
-local goingUp = true
+local goingUp = not rs.getOutput("bottom")
 
 local floorLevels = {}
+local floorIDs = {}
 local floorString = ""
 
 local elevatorCodes = {
@@ -19,7 +20,7 @@ local elevatorCodes = {
     [32] = function(id) end, -- Affirmative / I'm listening
     [33] = function(id) rednet.send(id, floorString, protocol) end, -- Send me the floor string
     [34] = function(id) rednet.send(id, os.computerID(), protocol) end, -- Who's the controller?
-    [35] = function(id) end,
+    [35] = function(id) end, -- The elevator is at my location
     [36] = function(id) end,
     [37] = function(id) end, -- Elevator is already at requested floor
     [38] = function(id) end, -- Elevator is busy
@@ -31,7 +32,7 @@ local function clearScrn()
     term.setCursorPos(1, 1)
 end
 
-local function addFloor(floor)
+local function addFloor(ID, floor)
     local function getNum(floor) return tonumber(floor:match("[+-]?%d+")) end
     local function getName(floor) return floor:gsub("[+-]?%d+", "") end
     
@@ -40,10 +41,14 @@ local function addFloor(floor)
     local floorNum = getNum(floor)
     
     floorLevels[floorName] = floorNum
+    floorIDs[floorName] = ID
     
     floorString = floorString..floorName.."\n"
-    clearScrn()
-    print(floorString)
+    print(ID, floorName, floorNum)
+end
+
+local function gotoFloor(floor)
+    
 end
 
 clearScrn()
@@ -51,16 +56,27 @@ print("Starting...")
 sleep(3)
 clearScrn()
 
+rednet.broadcast(30, protocol)
+
 while true do
     local id, msg
     id, msg = rednet.receive(protocol)
-    print(id, msg)
     
     if msg then
+        print(id, msg)
         if elevatorCodes[msg] then
             elevatorCodes[msg](id)
         elseif msg == msg:match("%w+[+-]?%d+") then
-            addFloor(msg)
+            addFloor(id, msg)
+        elseif floorLevels[msg] ~= nil then
+            gotoFloor(msg)
+        elseif msg == "up" then
+            goingUp = true
+        elseif msg == "down" then
+            goingUp = false
+        else
+            rednet.send(id, 39, protocol)
         end
+        rs.setOutput("bottom", not goingUp)
     end
 end
