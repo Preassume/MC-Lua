@@ -147,6 +147,8 @@ getRednet = function(id, msg)
         else
             rednet.send(id, 39, protocol)
         end
+        rs.setOutput("bottom", goingUp)
+        sleep(0.05)
         rs.setOutput("bottom", not goingUp)
     end 
 end
