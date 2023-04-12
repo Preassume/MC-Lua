@@ -47,9 +47,9 @@ while true do
         print(id, msg)
         if elevatorCodes[msg] then
             elevatorCodes[msg](id)
-        elseif msg == "up" or msg == "top" then
+        elseif msg == "top" then
             topExtended = not topExtended
-        elseif msg == "down" or msg == "bottom" then
+        elseif msg == "bottom" then
             bottomExtended = not bottomExtended
         elseif msg == "reset" then
             bottomExtended = false

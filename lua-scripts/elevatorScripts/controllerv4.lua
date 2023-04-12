@@ -47,6 +47,13 @@ local function addFloor(ID, floor)
     print(ID, floorName, floorNum)
 end
 
+local function refreshFloorList()
+    floorLevel = {}
+    floorIDs = {}
+    floorString = ""
+    rednet.broadcast(30, protocol)
+end
+
 local function gotoFloor(floor)
     
 end
@@ -56,7 +63,7 @@ print("Starting...")
 sleep(3)
 clearScrn()
 
-rednet.broadcast(30, protocol)
+refreshFloorList()
 
 while true do
     local id, msg
@@ -74,6 +81,8 @@ while true do
             goingUp = true
         elseif msg == "down" then
             goingUp = false
+        elseif msg == "refresh" then
+            refreshFloorList()
         else
             rednet.send(id, 39, protocol)
         end
