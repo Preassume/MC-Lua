@@ -6,9 +6,9 @@
 }]]
 
 local scriptLocations = {
-    ["controllerv3"] = "elevatorScripts/controllerv3.lua",
-    ["elevatorComputer"] = "elevatorScripts/elevatorComputer.lua",
-    ["floorComputer"] = "elevatorScripts/floorComputer.lua",
+    ["controllerv4"] = "elevatorScripts/controllerv4.lua",
+    --["elevatorComputer"] = "elevatorScripts/elevatorComputer.lua",
+    ["floorComputerv2"] = "elevatorScripts/floorComputerv2.lua",
 }
 
 return scriptLocations

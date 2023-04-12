@@ -71,7 +71,7 @@ local function test()
     local id, msg
     repeat
         rednet.send(controllerID, floorInfo, protocol)
-        id, msg = rednet.recieve(protocol, 1)
+        id, msg = rednet.receive(protocol, 2)
     until id and id == controllerID
 end
 
@@ -83,9 +83,9 @@ while true do
     controllerID = id
     
     if msg == 30 then -- Who are you?
-        --rednet.send(controllerID, floorName, protocol) -- It's me!
+        rednet.send(controllerID, floorInfo, protocol) -- It's me!
         --parallel.waitForAny(sendInfo, listenConfirm)
-        test()
+        --test()
     elseif msg == 31 then -- Where's the elevator?
         if redstone.getInput("front") then
             rednet.send(controllerID, floorName, protocol) -- It's here!

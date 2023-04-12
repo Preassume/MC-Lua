@@ -45,9 +45,9 @@ local function getFloors()
     local function getNum(msg) return tonumber(msg:match("[+-]?%d+")) end
     local function getName(msg) return msg:gsub("[+-]?%d+", "") end
     
+    rednet.broadcast(30, protocol) -- 30 means "everybody tell me who you are"
     local id, msg
     repeat
-        rednet.broadcast(30, protocol) -- 30 means "everybody tell me who you are"
         id, msg = rednet.receive(protocol, 3)
         if msg then
             rednet.send(id, 32, protocol)
@@ -59,7 +59,7 @@ local function getFloors()
     until not msg
     
     floorString = ""
-    for num, name in pairs(floorLevels) do
+    for name, num in pairs(floorLevels) do
         floorString = floorString..name.."\n"
     end
 end
@@ -118,8 +118,8 @@ print("Starting up...")
 getFloors()
 
 clearScrn()
-for num, name in pairs(floorLevels) do
-    print(num, name)
+for name, num in pairs(floorLevels) do
+    print(name, num)
 end
 
 while true do
