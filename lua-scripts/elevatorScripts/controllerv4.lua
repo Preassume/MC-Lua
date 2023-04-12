@@ -89,12 +89,14 @@ local function gotoFloor(id, floor)
     local locationID = findElevator()
     
     if not locationID then
+        print(">".."38")
         rednet.send(id, 38, protocol)
         return
     end
     
     local destinationID = getID(floor)
     if not destinationID then
+        print(">".."39")
         rednet.send(id, 39, protocol)
         return
     end
@@ -102,8 +104,11 @@ local function gotoFloor(id, floor)
     local locationLevel = floorLevels[floorIDs[destinationID]]
     local destinationLevel = floorLevels[floor]
     
+    print(locationLevel, destinationLevel, locationLevel == destinationLevel)
+    
     if locationLevel == destinationLevel then
-        rednet.send(destinationID, 38, protocol)
+        print(">".."38")
+        rednet.send(id, 38, protocol)
         return
     elseif locationLevel < destinationLevel then -- Floor is lower
         if goingUp then
