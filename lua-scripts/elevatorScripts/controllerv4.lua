@@ -93,14 +93,14 @@ local function gotoFloor(id, floor)
         return
     end
     
-    local locationLevel = floorLevels[floorIDs[id]]
-    local destinationLevel = floorLevels[floor]
-    
     local destinationID = getID(floor)
     if not destinationID then
         rednet.send(id, 39, protocol)
         return
     end
+    
+    local locationLevel = floorLevels[floorIDs[destinationID]]
+    local destinationLevel = floorLevels[floor]
     
     if locationLevel == destinationLevel then
         rednet.send(destinationID, 38, protocol)
@@ -148,20 +148,7 @@ clearScrn()
 
 refreshFloorList()
 
-local counter = 0
-
 while true do
-    if counter <= 2 then
-        counter = counter + 1
-    elseif counter == 2 then
-        for i,f in pairs(floorIDs) do
-            print(i,f)
-        end
-        for i,f in pairs(floorLevels) do
-            print(i,f)
-        end
-    end
-    
     local id, msg
     id, msg = rednet.receive(protocol)
     getRednet(id, msg)
