@@ -111,10 +111,10 @@ local function gotoFloor(id, floor)
         print(">".."38")
         rednet.send(id, 38, protocol)
         return
-    elseif locationLevel < destinationLevel then -- Floor is lower
+    elseif destinationLevel < locationLevel then -- Floor is lower
         goingUp = false
         rednet.send(destinationID, "bottom", protocol)
-    elseif locationLevel > destinationLevel then -- Floor is higher
+    elseif destinationLevel > locationLevel then -- Floor is higher
         goingUp = true
         rednet.send(destinationID, "top", protocol)
     end
