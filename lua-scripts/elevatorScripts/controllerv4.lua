@@ -14,6 +14,8 @@ local floorLevels = {}
 local floorIDs = {}
 local floorString = ""
 
+local getRednet
+
 local elevatorCodes = {
     [30] = function(id) end, -- Who is everyone?
     [31] = function(id) end, -- Where is the elevator?
@@ -117,7 +119,7 @@ local function gotoFloor(id, floor)
     rednet.send(locationID, "reset", protocol)
 end
 
-local function getRednet(id, msg)
+getRednet = function(id, msg)
     if msg then
         print(id, msg)
         if elevatorCodes[msg] then
@@ -146,7 +148,20 @@ clearScrn()
 
 refreshFloorList()
 
+local counter = 0
+
 while true do
+    if counter <= 2 then
+        counter = counter + 1
+    elseif counter == 2 then
+        for i,f in pairs(floorIDs) do
+            print(i,f)
+        end
+        for i,f in pairs(floorLevels) do
+            print(i,f)
+        end
+    end
+    
     local id, msg
     id, msg = rednet.receive(protocol)
     getRednet(id, msg)

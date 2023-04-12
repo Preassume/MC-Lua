@@ -19,7 +19,7 @@ local elevatorCodes = {
     [30] = function(id) rednet.send(id, floorInfo, protocol) end, -- Who is everyone?
     [31] = function(id) -- Where is the elevator?
         if rs.getInput("front") then
-            rednet.send(id, 32, protocol)
+            rednet.send(id, 35, protocol)
         end
     end, 
     [32] = function(id) end, -- Affirmative / I'm listening
