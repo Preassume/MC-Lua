@@ -3,6 +3,7 @@
 local args = {...}
 
 local protocol = args[1] or error("Error: No protocol provided.")
+local floorProtocol = protocol.."-floor"
 
 local gearShift = "bottom"
 
@@ -34,6 +35,13 @@ local function clearScrn()
     term.setCursorPos(1, 1)
 end
 
+local function getMsg()
+    local id, msg, prot = rednet.receive()
+    if prot and (prot == protocol or prot == floorProtocol) then
+        return id, msg, prot
+    end
+end
+
 local function addFloor(ID, floor)
     local function getNum(floor) return tonumber(floor:match("[+-]?%d+")) end
     local function getName(floor) return floor:gsub("[+-]?%d+", "") end
@@ -53,7 +61,7 @@ local function refreshFloorList()
     floorLevel = {}
     floorIDs = {}
     floorString = ""
-    rednet.broadcast(30, protocol)
+    rednet.broadcast(30, floorProtocol)
 end
 
 local function getID(floor)
@@ -69,8 +77,8 @@ local function findElevator()
     local id, msg
     local count = 0
     repeat
-        rednet.broadcast(31, protocol)
-        id, msg = rednet.receive(protocol, 1)
+        rednet.broadcast(31, floorProtocol)
+        id, msg = getMsg()
         
         if msg and msg == 35 then
             return id
@@ -109,16 +117,16 @@ local function gotoFloor(id, floor)
     
     if locationLevel == destinationLevel then
         print(">".."38")
-        rednet.send(id, 38, protocol)
+        rednet.send(id, 37, protocol)
         return
     elseif destinationLevel < locationLevel then -- Floor is lower
         goingUp = false
-        rednet.send(destinationID, "bottom", protocol)
+        rednet.send(destinationID, "bottom", floorProtocol)
     elseif destinationLevel > locationLevel then -- Floor is higher
         goingUp = true
-        rednet.send(destinationID, "top", protocol)
+        rednet.send(destinationID, "top", floorProtocol)
     end
-    rednet.send(locationID, "reset", protocol)
+    rednet.send(locationID, "reset", floorProtocol)
 end
 
 getRednet = function(id, msg)
@@ -151,7 +159,12 @@ clearScrn()
 refreshFloorList()
 
 while true do
-    local id, msg
-    id, msg = rednet.receive(protocol)
-    getRednet(id, msg)
+    local id, msg, prot = getMsg()
+    if msg then
+        getRednet(id, msg)
+    end
+    --[[id, msg, prot = rednet.receive()
+    if prot and (prot == protocol or prot == floorProtocol) then
+        getRednet(id, msg)
+    end]]
 end

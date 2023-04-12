@@ -3,6 +3,7 @@
 local args = {...}
 
 local protocol = args[1] or error("Error: No protocol provided.")
+protocol = protocol.."-floor"
 
 local floorName = args[2] or error("Error: No floor name provided.")
 
