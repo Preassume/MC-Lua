@@ -127,6 +127,9 @@ local function gotoFloor(id, floor)
         rednet.send(destinationID, "top", floorProtocol)
     end
     rednet.send(locationID, "reset", floorProtocol)
+    print("<"..goingUp)
+    rs.setOutput("bottom", goingUp)
+    sleep(0.1)
 end
 
 getRednet = function(id, msg)
@@ -147,8 +150,7 @@ getRednet = function(id, msg)
         else
             rednet.send(id, 39, protocol)
         end
-        rs.setOutput("bottom", goingUp)
-        sleep(0.05)
+        print(">"..not goingUp)
         rs.setOutput("bottom", not goingUp)
     end 
 end
