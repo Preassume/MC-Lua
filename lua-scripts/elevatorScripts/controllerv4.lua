@@ -116,7 +116,6 @@ local function gotoFloor(id, floor)
     print(locationLevel == destinationLevel, locationLevel < destinationLevel, locationLevel > destinationLevel)
     
     if locationLevel == destinationLevel then
-        print(">".."38")
         rednet.send(id, 37, protocol)
         return
     elseif destinationLevel < locationLevel then -- Floor is lower
@@ -127,7 +126,7 @@ local function gotoFloor(id, floor)
         rednet.send(destinationID, "top", floorProtocol)
     end
     rednet.send(locationID, "reset", floorProtocol)
-    print("<"..goingUp)
+    print(goingUp)
     rs.setOutput("bottom", goingUp)
     sleep(0.1)
 end
@@ -150,7 +149,6 @@ getRednet = function(id, msg)
         else
             rednet.send(id, 39, protocol)
         end
-        print(">"..not goingUp)
         rs.setOutput("bottom", not goingUp)
     end 
 end
