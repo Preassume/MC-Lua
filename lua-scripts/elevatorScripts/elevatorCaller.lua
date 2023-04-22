@@ -9,7 +9,7 @@ local floorName = args[2] or error("Error: No floor name was given.")
 peripheral.find("modem", rednet.open)
 
 local responseTable = {
-	[0] = "No response from controller. Perhaps it's busy. Try again in a moment.",
+	--[0] = "No response from controller. Perhaps it's busy. Try again in a moment.",
 	[37] = "I've been told that the elevator is already here.",
 	[38] = "The elevator seems to be busy now. Try again in a moment.",
 	[39] = "The controller doesn't recognize this floor. Perhaps it was entered incorrectly on setup?",
@@ -22,7 +22,7 @@ local function callElevator()
 		id, msg = rednet.receive(protocol, 1)
 	end
 	if not msg then
-		return 0
+		return nil
 	end
 	
 	if msg == 37 or msg == 38 or msg == 39 then
